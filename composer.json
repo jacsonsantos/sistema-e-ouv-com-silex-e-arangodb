@@ -1,0 +1,21 @@
+{
+    "name": "jacson/milagres",
+    "type": "project",
+    "require": {
+        "silex/silex": "^2.0",
+        "symfony/serializer": "^3.2",
+        "twig/twig": "^2.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jacson",
+            "email": "jacsonk47@gmail.com"
+        }
+    ],
+    "autoload":{
+        "psr-4":{
+            "JSantos\\":"app"
+        }
+    }
+}
