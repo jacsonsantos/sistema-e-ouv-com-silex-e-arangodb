@@ -16,14 +16,19 @@ class RouteServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app->get('/',"index:getIndex");
-        $app->get('/login',"index:getLogin");
+
+        $app->mount('/login', function ($login) {
+            $login->get('/',"login:getIndex");
+            $login->get('/loguot',"login:getLoguot");
+            $login->get('/forgot',"login:getForgot");
+        });
 
         $app->mount('/admin', function ($admin) {
-            $admin->get('/',"index:getAdmin");
-            $admin->get('/category/{slug}',"index:getCategory")->value('slug',null);
-        })->before(function (){
+            $admin->get('/',"admin:getIndex");
+            $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
+            $admin->before(function (){
 //                return new RedirectResponse('/login');
             });
-
+        });
     }
 }

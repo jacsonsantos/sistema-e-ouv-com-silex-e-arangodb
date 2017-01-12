@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class IndexController
+class LoginController
 {
     private $app;
 
@@ -22,10 +22,15 @@ class IndexController
         $this->app = $application;
     }
 
-    public function getIndex(Request $request)
-    {
-//        $data = $request->query->all();
-//        return new Response($this->app['serializer']->serialize($data, $format));
-        return $this->app['twig']->render('index.twig');
+    public function getIndex(Request $request){
+        return $this->app['twig']->render('login.twig');
+    }
+
+    public function getLoguot(Request $request){
+        return $this->app['twig']->render('login.twig');
+    }
+
+    public function getForgot(Request $request){
+        return $this->app['twig']->render('login.twig');
     }
 }
