@@ -12,6 +12,7 @@ chdir(dirname(__DIR__));
         'twig.path' => __DIR__.'/../views',
     ));
     $app->register(new Silex\Provider\SerializerServiceProvider());
+    $app->register(new \JSantos\Provider\ConnectionServiceProvider());
     $app->register(new \JSantos\Provider\IndexServiceProvider());
     $app->register(new \JSantos\Provider\AdminServiceProvider());
     $app->register(new \JSantos\Provider\LoginServiceProvider());
