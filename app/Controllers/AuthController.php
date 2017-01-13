@@ -9,7 +9,7 @@
 namespace JSantos\Controllers;
 
 use Lcobucci\JWT\Parser;
-use Lcobucci\JWT\Signer\Rsa\Sha256;
+use Lcobucci\JWT\Signer\Hmac\Sha256;
 use Silex\Application;
 use Lcobucci\JWT\Builder;
 
@@ -27,22 +27,22 @@ class AuthController
     public function generateToken($key, $secret = 'q521jf7wpk')
     {
         $token = (new Builder())
-            ->setIssuer('http://localhost:4040') // Configures the issuer (iss claim)
-            ->setAudience('http://localhost:4040') // Configures the audience (aud claim)
-            ->setId('4f1g23a12aa', true) // Configures the id (jti claim), replicating as a header item
-            ->setIssuedAt(time()) // Configures the time that the token was issue (iat claim)
-            ->setNotBefore(time() + 60) // Configures the time that the token can be used (nbf claim)
-            ->setExpiration(time() + 3600) // Configures the expiration time of the token (nbf claim)
-            ->set('uid', $key) // Configures a new claim, called "uid"
-            ->sign($this->signer, $secret) // creates a signature using "testing" as key
-            ->getToken(); // Retrieves the generated token
+            ->setIssuer('http://localhost:4040')
+            ->setAudience('http://localhost:4040')
+            ->setId('4f1g23a12aa', true)
+            ->setIssuedAt(time())
+            ->setNotBefore(time() + 60)
+            ->setExpiration(time() + 3600)
+            ->set('uid', $key)
+            ->sign($this->signer, $secret)
+            ->getToken();
 
         return $token;
     }
 
     public function validationToken($token, $secret = 'q521jf7wpk')
     {
-        $token = (new Parser())->parse($token);
-        return $token->verify($this->signer, $secret);
+        $parse = (new Parser())->parse($token);
+        return $parse->verify($this->signer, $secret);
     }
 }

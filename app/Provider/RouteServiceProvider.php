@@ -19,6 +19,7 @@ class RouteServiceProvider implements ServiceProviderInterface
 
         $app->mount('/login', function ($login) {
             $login->get('/',"login:getIndex");
+            $login->post('/input',"login:postInput");
             $login->get('/loguot',"login:getLoguot");
             $login->get('/forgot',"login:getForgot");
         });
@@ -27,7 +28,7 @@ class RouteServiceProvider implements ServiceProviderInterface
             $admin->get('/',"admin:getIndex");
             $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
             $admin->before(function (){
-//                return new RedirectResponse('/login');
+                return new RedirectResponse('/login');
             });
         });
     }

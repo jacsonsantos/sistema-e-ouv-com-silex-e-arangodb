@@ -24,8 +24,6 @@ class IndexController
 
     public function getIndex(Request $request)
     {
-//        $data = $request->query->all();
-//        return new Response($this->app['serializer']->serialize($data, $format));
         return $this->app['twig']->render('index.twig');
     }
 }

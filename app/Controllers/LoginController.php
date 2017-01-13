@@ -9,9 +9,9 @@
 namespace JSantos\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 
 class LoginController
 {
@@ -24,6 +24,12 @@ class LoginController
 
     public function getIndex(Request $request){
         return $this->app['twig']->render('login.twig');
+    }
+    public function postInput(Request $request)
+    {
+        $data  = $request->request->all();
+
+        return new JsonResponse($data,200);
     }
 
     public function getLoguot(Request $request){
