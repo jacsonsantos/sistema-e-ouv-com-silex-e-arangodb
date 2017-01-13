@@ -18,6 +18,14 @@ class ArangoModel
 
     private $lastInsertId = null;
 
+    private $collectionHandler;
+
+    private $collection;
+
+    private $documentHandler;
+
+    private $document;
+
     /**
      * ArangoModel constructor.
      * @param Application $application
@@ -32,7 +40,10 @@ class ArangoModel
      */
     private function collectionHandler()
     {
-        return new CollectionHandler($this->app['connection']);
+        if (!$this->collectionHandler) {
+            $this->collectionHandler = new CollectionHandler($this->app['connection']);
+        }
+        return $this->collectionHandler;
     }
 
     /**
@@ -40,7 +51,10 @@ class ArangoModel
      */
     private function collection()
     {
-        return new Collection();
+        if(!$this->collection) {
+            $this->collection = new Collection();
+        }
+        return $this->collection;
     }
 
     /**
@@ -50,7 +64,6 @@ class ArangoModel
     public function hasCollection($nameCollection)
     {
         $collectionHandler = $this->collectionHandler();
-
         return $collectionHandler->has($nameCollection);
     }
 
@@ -61,7 +74,8 @@ class ArangoModel
      */
     public function deleteCollection($nameCollection, array $data = [])
     {
-        return ($this->collectionHandler())->drop($nameCollection,$data);
+        $collectionHandler = $this->collectionHandler();
+        return $collectionHandler->drop($nameCollection,$data);
     }
 
     /**
@@ -74,9 +88,9 @@ class ArangoModel
             $collection = $this->collection();
             $collection->setName($newCollection);
 
-            return ($this->collectionHandler())->create($collection);
+            $collectionHandler = $this->collectionHandler();
+            return $collectionHandler->create($collection);
         }
-
         return null;
     }
 
@@ -85,7 +99,10 @@ class ArangoModel
      */
     private function documentHandler()
     {
-        return new DocumentHandler($this->app['connection']);
+        if (!$this->documentHandler) {
+            $this->documentHandler = new DocumentHandler($this->app['connection']);
+        }
+        return $this->documentHandler;
     }
 
     /**
@@ -93,7 +110,10 @@ class ArangoModel
      */
     private function document()
     {
-        return new Document();
+        if (!$this->document) {
+            $this->document = new Document();
+        }
+        return $this->document;
     }
 
     /**
@@ -108,8 +128,8 @@ class ArangoModel
         foreach ($data as $key => $value) {
             $document->set($key,$value);
         }
-
-        $this->lastInsertId = ($this->documentHandler())->save($nameCollection,$document);
+        $documentHandler = $this->documentHandler();
+        $this->lastInsertId = $documentHandler->save($nameCollection,$document);
 
         return $this->lastInsertId;
     }
@@ -129,7 +149,8 @@ class ArangoModel
      */
     public function hasDocument($nameCollection, $id)
     {
-        return ($this->documentHandler())->has($nameCollection,$id);
+        $documentHandler = $this->documentHandler();
+        return $documentHandler->has($nameCollection,$id);
     }
 
     /**
@@ -139,7 +160,8 @@ class ArangoModel
      */
     public function getDocument($nameCollection, $id)
     {
-        return ($this->documentHandler())->get($nameCollection,$id);
+        $documentHandler = $this->documentHandler();
+        return $documentHandler->get($nameCollection,$id);
     }
 
     /**
@@ -149,6 +171,7 @@ class ArangoModel
      */
     public function searchDocument($nameCollection, array $document)
     {
-        return ($this->collectionHandler())->byExample($nameCollection,$document);
+        $collectionHandler = $this->collectionHandler();
+        return $collectionHandler->byExample($nameCollection,$document);
     }
 }
