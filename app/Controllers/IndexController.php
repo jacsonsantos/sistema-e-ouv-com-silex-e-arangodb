@@ -9,10 +9,11 @@
 namespace JSantos\Controllers;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use JSantos\Model\ArangoModel;
+
 class IndexController
 {
     private $app;
@@ -22,17 +23,8 @@ class IndexController
         $this->app = $application;
     }
 
-    public function getIndex(Request $request)
+    public function getIndex()
     {
-        $arango = new ArangoModel($this->app);
-
-        $user = [
-            "email" => "jacsonk47@gmail.com",
-            "password" => password_hash("jacson",PASSWORD_DEFAULT,['cost'=>15]),
-        ];
-
-        var_dump($arango->createDocument("users",$user));
-        die();
-//        return $this->app['twig']->render('index.twig');
+        return $this->app['twig']->render('index.twig');
     }
 }
