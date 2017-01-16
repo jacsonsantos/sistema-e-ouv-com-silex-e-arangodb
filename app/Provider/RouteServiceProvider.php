@@ -28,7 +28,7 @@ class RouteServiceProvider implements ServiceProviderInterface
             $admin->get('/',"admin:getIndex");
             $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
             $admin->before(function (){
-                return new RedirectResponse('/login');
+//                return new RedirectResponse('/login');
             });
         });
     }
