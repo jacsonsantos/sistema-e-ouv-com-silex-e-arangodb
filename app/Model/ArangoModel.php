@@ -14,17 +14,42 @@ use triagens\ArangoDb\Document;
 
 class ArangoModel
 {
+    /**
+     * @var Application
+     */
     private $app;
-
+    /**
+     * @var int
+     */
     private $lastInsertId = null;
-
+    /**
+     * @var CollectionHandler
+     */
     private $collectionHandler;
-
+    /**
+     * @var Collection
+     */
     private $collection;
-
+    /**
+     * @var DocumentHandler
+     */
     private $documentHandler;
-
+    /**
+     * @var Document;
+     */
     private $document;
+    /**
+     * @var string
+     */
+    private $prepare = '';
+    /**
+     * @var array
+     */
+    private $bindValue = [];
+    /**
+     * @var string
+     */
+    private $bindCollection = '';
 
     /**
      * ArangoModel constructor.
@@ -58,32 +83,47 @@ class ArangoModel
     }
 
     /**
-     * @param String $nameCollection
+     * @param string $nameCollection
      * @return bool
+     * @throws \Exception
      */
     public function hasCollection($nameCollection)
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
         $collectionHandler = $this->collectionHandler();
         return $collectionHandler->has($nameCollection);
     }
 
     /**
-     * @param $nameCollection
+     * @param string $nameCollection
      * @param array $data
      * @return bool
+     * @throws \Exception
      */
     public function deleteCollection($nameCollection, array $data = [])
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter - 1");
+        }
+
         $collectionHandler = $this->collectionHandler();
         return $collectionHandler->drop($nameCollection,$data);
     }
 
     /**
-     * @param $newCollection
-     * @return mixed|null
+     * @param string $newCollection
+     * @return mixed|bool
+     * @throws \Exception
      */
     public function createCollection($newCollection)
     {
+        if (!(is_string($newCollection))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
         if (!$this->hasCollection($newCollection)) {
             $collection = $this->collection();
             $collection->setName($newCollection);
@@ -91,7 +131,7 @@ class ArangoModel
             $collectionHandler = $this->collectionHandler();
             return $collectionHandler->create($collection);
         }
-        return null;
+        return false;
     }
 
     /**
@@ -117,16 +157,21 @@ class ArangoModel
     }
 
     /**
-     * @param $nameCollection
+     * @param string $nameCollection
      * @param array $data
      * @return mixed
+     * @throws \Exception
      */
-    public function createDocument($nameCollection, array $data = [])
+    public function createDocument($nameCollection, array $data)
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
         $document = $this->document();
 
         foreach ($data as $key => $value) {
-            $document->set($key,$value);
+            $document->set((string)$key,$value);
         }
         $documentHandler = $this->documentHandler();
         $this->lastInsertId = $documentHandler->save($nameCollection,$document);
@@ -143,34 +188,213 @@ class ArangoModel
     }
 
     /**
-     * @param $nameCollection
-     * @param $id
+     * @param string $nameCollection
+     * @param int $id
      * @return bool
+     * @throws \Exception
      */
     public function hasDocument($nameCollection, $id)
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter - 1");
+        }
+        if (!(is_int($id))) {
+            throw new \Exception("Invalid value for parameter - 2");
+        }
+
         $documentHandler = $this->documentHandler();
         return $documentHandler->has($nameCollection,$id);
     }
 
     /**
-     * @param $nameCollection
-     * @param $id
+     * @param string $nameCollection
+     * @param int $id
      * @return Document
+     * @throws \Exception
      */
     public function getDocument($nameCollection, $id)
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter - 1");
+        }
+        if (!(is_int($id))) {
+            throw new \Exception("Invalid value for parameter - 2");
+        }
+
         $documentHandler = $this->documentHandler();
         return $documentHandler->get($nameCollection,$id);
     }
 
     /**
-     * @param $nameCollection
+     * @param string $nameCollection
+     * @param int $id
+     * @param array $data
+     * @return bool
+     * @throws \Exception
+     */
+    public function updateDocument($nameCollection, $id, array $data)
+    {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter - 1");
+        }
+        if (!(is_int($id))) {
+            throw new \Exception("Invalid value for parameter - 2");
+        }
+
+        $documentHandler = $this->documentHandler();
+        $document = $this->getDocument($nameCollection,$id);
+
+        foreach ($data as $key => $value) {
+            $document->set((string)$key,$value);
+        }
+        return $documentHandler->update($document);
+    }
+
+    /**
+     * parameter - 1: Instance of Document $document or array with [$nameCollection => $id]
+     * parameter - 2: type value String
+     * @param Document|array $document
+     * @param string $attribute
+     * @return bool
+     * @throws \Exception
+     */
+    public function removeAttributeDocument($document, $attribute)
+    {
+        if (!($document instanceof Document) || !(is_array($document))) {
+            throw new \Exception("Invalid value for parameter - 1");
+        }
+        if (empty($attribute) || !(is_string($attribute))) {
+            throw new \Exception("Invalid value for parameter - 2");
+        }
+
+        $doc = [];
+        $documentHandler = $this->documentHandler();
+
+        if($document instanceof Document) {
+            $doc = $document;
+        }
+        if (is_array($document)) {
+            foreach ($document as $nameCollection => $id) {
+                $doc = $this->getDocument((string)$nameCollection,(int)$id);
+            }
+        }
+        if ($doc) {
+            unset($doc->$attribute);
+            return $documentHandler->replace($doc);
+        }
+        return false;
+    }
+
+    /**
+     * @param string $nameCollection
+     * @param Document $currentDocument
+     * @param Document $newDocument
+     * @return bool
+     * @throws \Exception
+     */
+    public function replaceDocument($nameCollection, Document $currentDocument, Document $newDocument)
+    {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
+        $documentHandler = $this->documentHandler();
+
+        return $documentHandler->replaceById($nameCollection, $currentDocument->getId(),$newDocument);
+    }
+
+    /**
+     * @param Document|array $document
+     * @return bool
+     * @throws \Exception
+     */
+    public function removeDocument($document)
+    {
+        if (!($document instanceof Document) || !(is_array($document))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
+        $doc = [];
+        $documentHandler = $this->documentHandler();
+
+        if($document instanceof Document) {
+            $doc = $document;
+        }
+        if (is_array($document)) {
+            foreach ($document as $nameCollection => $id) {
+                $doc = $this->getDocument((string)$nameCollection,(int)$id);
+            }
+        }
+        if ($doc) {
+            return $documentHandler->remove($doc);
+        }
+        return false;
+    }
+
+    /**
+     * @param string $queryAQL
+     * @return ArangoModel $this
+     * @throws \Exception
+     */
+    public function prepare($queryAQL)
+    {
+        if (!(is_string($queryAQL))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+        $this->prepare = $queryAQL;
+
+        return $this;
+    }
+
+    /**
+     * @param array $bindValue
+     * @return ArangoModel $this
+     */
+    public function bindValue(array $bindValue)
+    {
+
+        $this->bindValue[] = $bindValue;
+
+        return $this;
+    }
+
+    public function bindCollection(array $bindCollection)
+    {
+        foreach ($bindCollection as $bind => $collection)
+        $this->bindCollection = ['@'.$bind => $collection];
+
+        return $this;
+    }
+
+    public function execute($queryAQL = null)
+    {
+        if (is_null($queryAQL)) {
+            $bindVars = [];
+
+            $queryAQL = [
+                'query' => $this->prepare
+                ];
+
+            array_push($bindVars['bindVars'],$this->bindCollection);
+
+            foreach ($this->bindValue as $bindValue) {
+                array_push($bindVars['bindVars'],$bindValue);
+            }
+        }
+    }
+
+    /**
+     * @param string $nameCollection
      * @param array $document [ "key" => "needle"]
      * @return \triagens\ArangoDb\cursor
+     * @throws \Exception
      */
-    public function searchDocument($nameCollection, array $document)
+    public function searchInDocument($nameCollection, array $document)
     {
+        if (!(is_string($nameCollection))) {
+            throw new \Exception("Invalid value for parameter");
+        }
+
         $collectionHandler = $this->collectionHandler();
         return $collectionHandler->byExample($nameCollection,$document);
     }
