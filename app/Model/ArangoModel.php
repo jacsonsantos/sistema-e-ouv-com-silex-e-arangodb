@@ -369,6 +369,10 @@ class ArangoModel
         return $this;
     }
 
+    /**
+     * @param array $bindCollection
+     * @return $this
+     */
     public function bindCollection(array $bindCollection)
     {
         foreach ($bindCollection as $bind => $collection) {
@@ -378,6 +382,9 @@ class ArangoModel
         return $this;
     }
 
+    /**
+     * @return Document array
+     */
     public function execute()
     {
         $statement = new Statement(
@@ -388,6 +395,23 @@ class ArangoModel
                     $this->bindCollection => $this->vBindCollection,
                     $this->bindValue => $this->vBindValue
                 ]
+            ]
+        );
+
+        $result = $statement->execute();
+        return $result->getAll();
+    }
+
+    /**
+     * @param string $aql
+     * @return Document array
+     */
+    public function query($aql)
+    {
+        $statement = new Statement(
+            $this->app['connection'],
+            [
+                'query' => $aql,
             ]
         );
 
