@@ -11,6 +11,7 @@ use triagens\ArangoDb\Collection;
 use triagens\ArangoDb\CollectionHandler;
 use triagens\ArangoDb\DocumentHandler;
 use triagens\ArangoDb\Document;
+use triagens\ArangoDb\Statement;
 
 class ArangoModel
 {
@@ -43,13 +44,21 @@ class ArangoModel
      */
     private $prepare = '';
     /**
-     * @var array
+     * @var string
      */
-    private $bindValue = [];
+    private $bindValue = '';
+    /**
+     * @var string
+     */
+    private $vBindValue = '';
     /**
      * @var string
      */
     private $bindCollection = '';
+    /**
+     * @var string
+     */
+    private $vBindCollection = '';
 
     /**
      * ArangoModel constructor.
@@ -352,35 +361,38 @@ class ArangoModel
      */
     public function bindValue(array $bindValue)
     {
-
-        $this->bindValue[] = $bindValue;
+        foreach ($bindValue as $bind => $value) {
+            $this->bindValue = (string) $bind;
+            $this->vBindValue = (string) $value;
+        }
 
         return $this;
     }
 
     public function bindCollection(array $bindCollection)
     {
-        foreach ($bindCollection as $bind => $collection)
-        $this->bindCollection = ['@'.$bind => $collection];
-
+        foreach ($bindCollection as $bind => $collection) {
+            $this->bindCollection = (string) '@' . $bind;
+            $this->vBindCollection = (string) $collection;
+        }
         return $this;
     }
 
-    public function execute($queryAQL = null)
+    public function execute()
     {
-        if (is_null($queryAQL)) {
-            $bindVars = [];
+        $statement = new Statement(
+            $this->app['connection'],
+            [
+                'query' => $this->prepare,
+                'bindVars' => [
+                    $this->bindCollection => $this->vBindCollection,
+                    $this->bindValue => $this->vBindValue
+                ]
+            ]
+        );
 
-            $queryAQL = [
-                'query' => $this->prepare
-                ];
-
-            array_push($bindVars['bindVars'],$this->bindCollection);
-
-            foreach ($this->bindValue as $bindValue) {
-                array_push($bindVars['bindVars'],$bindValue);
-            }
-        }
+        $result = $statement->execute();
+        return $result->getAll();
     }
 
     /**

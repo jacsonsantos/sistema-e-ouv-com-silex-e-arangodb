@@ -25,17 +25,6 @@ class IndexController
 
     public function getIndex()
     {
-        $arango = new ArangoModel($this->app);
-
-        $aql = 'FOR u IN @@collection FILTER u.name == @name RETURN u';
-
-        $arango = $arango->prepare($aql);
-        $arango->bindCollection(['collection'=>'users']);
-        $arango->bindValue(['name'=>'jacson']);
-        $arango->bindValue(['age'=>22]);
-        $arango->execute();
-
-
         return $this->app['twig']->render('index.twig');
     }
 }
