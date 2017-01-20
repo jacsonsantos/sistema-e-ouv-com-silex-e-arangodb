@@ -8,6 +8,7 @@
  */
 namespace JSantos\Controllers;
 
+use JSantos\Model\ArangoModel;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -28,8 +29,23 @@ class LoginController
     public function postInput(Request $request)
     {
         $data  = $request->request->all();
+        $arango = new ArangoModel($this->app);
 
-        return new JsonResponse($data,200);
+        $user = $arango->searchInDocument('users',['email'=>$data['email']]);
+
+        if (!count($user)) {
+            return new RedirectResponse('/login');
+        }
+
+        if (!password_verify($data['password'],$user[0]->password)) {
+            return new RedirectResponse('/login');
+        }
+
+        $token = $this->app['auth']->generateToken($user[0]->_key);
+
+        $this->app['session']->set('token',$token);
+
+        return new RedirectResponse('/admin');
     }
 
     public function getLoguot(Request $request){

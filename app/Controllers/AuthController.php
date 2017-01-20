@@ -15,15 +15,30 @@ use Lcobucci\JWT\Builder;
 
 class AuthController
 {
+    /**
+     * @var Application
+     */
     private $app;
+    /**
+     * @var Sha256
+     */
     private $signer;
 
+    /**
+     * AuthController constructor.
+     * @param Application $application
+     */
     public function __construct(Application $application)
     {
         $this->app = $application;
         $this->signer = new Sha256();
     }
 
+    /**
+     * @param $key
+     * @param string $secret
+     * @return \Lcobucci\JWT\Token
+     */
     public function generateToken($key, $secret = 'q521jf7wpk')
     {
         $token = (new Builder())
@@ -40,6 +55,11 @@ class AuthController
         return $token;
     }
 
+    /**
+     * @param $token
+     * @param string $secret
+     * @return bool
+     */
     public function validationToken($token, $secret = 'q521jf7wpk')
     {
         $parse = (new Parser())->parse($token);

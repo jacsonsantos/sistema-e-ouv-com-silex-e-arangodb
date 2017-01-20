@@ -10,6 +10,7 @@ namespace JSantos\Provider;
 use Pimple\ServiceProviderInterface;
 use Pimple\Container;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class RouteServiceProvider implements ServiceProviderInterface
 {
@@ -17,18 +18,23 @@ class RouteServiceProvider implements ServiceProviderInterface
     {
         $app->get('/',"index:getIndex");
 
-        $app->mount('/login', function ($login) {
+        $app->mount('/login', function($login) {
             $login->get('/',"login:getIndex");
             $login->post('/input',"login:postInput");
             $login->get('/loguot',"login:getLoguot");
             $login->get('/forgot',"login:getForgot");
         });
 
-        $app->mount('/admin', function ($admin) {
+        $app->mount('/admin', function($admin) use($app) {
             $admin->get('/',"admin:getIndex");
             $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
-            $admin->before(function (){
-//                return new RedirectResponse('/login');
+            $admin->before(function() use($app) {
+
+                $token = $app['session']->get('token');
+
+                if(!$app['auth']->validationToken($token)) {
+                    return new RedirectResponse('/login');
+                }
             });
         });
     }

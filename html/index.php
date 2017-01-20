@@ -19,5 +19,6 @@ chdir(dirname(__DIR__));
     $app->register(new \JSantos\Provider\RouteServiceProvider());
     $app->register(new \JSantos\Provider\AuthServiceProvider());
     $app->register(new Silex\Provider\ServiceControllerServiceProvider());
+    $app->register(new Silex\Provider\SessionServiceProvider());
 
     $app->run();

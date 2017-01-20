@@ -432,6 +432,7 @@ class ArangoModel
         }
 
         $collectionHandler = $this->collectionHandler();
-        return $collectionHandler->byExample($nameCollection,$document);
+        $cursor = $collectionHandler->byExample($nameCollection,$document);
+        return $cursor->getAll();
     }
 }
