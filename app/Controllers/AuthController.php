@@ -41,7 +41,8 @@ class AuthController
      */
     public function generateToken($key, $secret = 'q521jf7wpk')
     {
-        $token = (new Builder())
+        $builder = new Builder();
+        $token = $builder
             ->setIssuer('http://localhost:4040')
             ->setAudience('http://localhost:4040')
             ->setId('4f1g23a12aa', true)

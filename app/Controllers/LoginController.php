@@ -43,13 +43,20 @@ class LoginController
 
         $token = $this->app['auth']->generateToken($user[0]->_key);
 
-        $this->app['session']->set('token',$token);
+        if ($this->app['session']->has('token')) {
+            $this->app['session']->remove('token');
+        }
+        $this->app['session']->set('token',base64_encode($token));
 
         return new RedirectResponse('/admin');
     }
 
-    public function getLoguot(Request $request){
-        return $this->app['twig']->render('login.twig');
+    public function getLoguot()
+    {
+
+        $this->app['session']->remove('token');
+
+        return new RedirectResponse('/login');
     }
 
     public function getForgot(Request $request){

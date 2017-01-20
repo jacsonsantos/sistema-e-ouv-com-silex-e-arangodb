@@ -30,11 +30,16 @@ class RouteServiceProvider implements ServiceProviderInterface
             $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
             $admin->before(function() use($app) {
 
-                $token = $app['session']->get('token');
-
-                if(!$app['auth']->validationToken($token)) {
+                if (!$app['session']->has('token')) {
                     return new RedirectResponse('/login');
                 }
+
+                $token = $app['session']->get('token');
+
+                if (!$app['auth']->validationToken(base64_decode($token))) {
+                    return new RedirectResponse('/login');
+                }
+
             });
         });
     }
