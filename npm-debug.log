@@ -1,0 +1,64 @@
+0 info it worked if it ends with ok
+1 verbose cli [ 'C:\\Program Files\\nodejs\\node.exe',
+1 verbose cli   'C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js',
+1 verbose cli   'install',
+1 verbose cli   'http-server',
+1 verbose cli   '-g' ]
+2 info using npm@2.15.8
+3 info using node@v4.4.7
+4 verbose install initial load of C:\Users\jacson\AppData\Roaming\npm\package.json
+5 verbose readDependencies loading dependencies from C:\Users\jacson\AppData\Roaming\npm\package.json
+6 silly cache add args [ 'http-server', null ]
+7 verbose cache add spec http-server
+8 silly cache add parsed spec Result {
+8 silly cache add   raw: 'http-server',
+8 silly cache add   scope: null,
+8 silly cache add   name: 'http-server',
+8 silly cache add   rawSpec: '',
+8 silly cache add   spec: 'latest',
+8 silly cache add   type: 'tag' }
+9 silly addNamed http-server@latest
+10 verbose addNamed "latest" is being treated as a dist-tag for http-server
+11 info addNameTag [ 'http-server', 'latest' ]
+12 silly mapToRegistry name http-server
+13 silly mapToRegistry using default registry
+14 silly mapToRegistry registry https://registry.npmjs.org/
+15 silly mapToRegistry data Result {
+15 silly mapToRegistry   raw: 'http-server',
+15 silly mapToRegistry   scope: null,
+15 silly mapToRegistry   name: 'http-server',
+15 silly mapToRegistry   rawSpec: '',
+15 silly mapToRegistry   spec: 'latest',
+15 silly mapToRegistry   type: 'tag' }
+16 silly mapToRegistry uri https://registry.npmjs.org/http-server
+17 verbose addNameTag registry:https://registry.npmjs.org/http-server not in flight; fetching
+18 verbose request uri https://registry.npmjs.org/http-server
+19 verbose request no auth needed
+20 info attempt registry request try #1 at 13:32:52
+21 verbose request id b3a861fd50d903e5
+22 http request GET https://registry.npmjs.org/http-server
+23 info retry will retry, error on last attempt: Error: read ECONNRESET
+24 info attempt registry request try #2 at 13:33:03
+25 http request GET https://registry.npmjs.org/http-server
+26 info retry will retry, error on last attempt: Error: read ECONNRESET
+27 info attempt registry request try #3 at 13:34:03
+28 http request GET https://registry.npmjs.org/http-server
+29 verbose stack Error: read ECONNRESET
+29 verbose stack     at exports._errnoException (util.js:873:11)
+29 verbose stack     at TLSWrap.onread (net.js:557:26)
+30 verbose cwd C:\Users\jacson\Downloads\milagres_e_ouv
+31 error Windows_NT 6.1.7601
+32 error argv "C:\\Program Files\\nodejs\\node.exe" "C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\npm-cli.js" "install" "http-server" "-g"
+33 error node v4.4.7
+34 error npm  v2.15.8
+35 error code ECONNRESET
+36 error errno ECONNRESET
+37 error syscall read
+38 error network read ECONNRESET
+38 error network This is most likely not a problem with npm itself
+38 error network and is related to network connectivity.
+38 error network In most cases you are behind a proxy or have bad network settings.
+38 error network
+38 error network If you are behind a proxy, please make sure that the
+38 error network 'proxy' config is set properly.  See: 'npm help config'
+39 verbose exit [ 1, true ]

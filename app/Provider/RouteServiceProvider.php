@@ -17,6 +17,7 @@ class RouteServiceProvider implements ServiceProviderInterface
     public function register(Container $app)
     {
         $app->get('/',"index:getIndex");
+        $app->post('/',"index:postIndex");
 
         $app->mount('/login', function($login) {
             $login->get('/',"login:getIndex");
@@ -27,16 +28,20 @@ class RouteServiceProvider implements ServiceProviderInterface
 
         $app->mount('/admin', function($admin) use($app) {
             $admin->get('/',"admin:getIndex");
+            $admin->get('/token',"admin:getToken");
+            $admin->get('/panel',"admin:getPanel");
             $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
             $admin->before(function() use($app) {
 
-                if (!$app['session']->has('token')) {
-                    return new RedirectResponse('/login');
+                $token = '';
+                if ($app['session']->has('token')) {
+                    $token = base64_decode($app['session']->get('token'));
                 }
 
-                $token = $app['session']->get('token');
-
-                if (!$app['auth']->validationToken(base64_decode($token))) {
+                if (!$token) {
+                    return new RedirectResponse('/login');
+                }
+                if (!$app['auth']->validationToken($token)) {
                     return new RedirectResponse('/login');
                 }
 

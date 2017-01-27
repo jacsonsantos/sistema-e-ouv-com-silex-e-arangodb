@@ -46,6 +46,7 @@ class LoginController
         if ($this->app['session']->has('token')) {
             $this->app['session']->remove('token');
         }
+
         $this->app['session']->set('token',base64_encode($token));
 
         return new RedirectResponse('/admin');

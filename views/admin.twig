@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" ng-app="app">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -28,7 +28,7 @@
         <a href="/login/loguot">Sair</a>
     </div>
 </div>
-<div class="container">
+<div class="container" ng-controller="AppCtrl">
     <div class="col-sm-12">
         <div class="col-md-8 col-md-offset-2 padding">
             <select name="" id="" class="form-control">
@@ -148,7 +148,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="PanelCtrl">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -168,14 +168,6 @@
                                     <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
                                     Administração
                                 </li>
-                                <li class="list-group-item">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    Educação
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    Saúde
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -190,14 +182,6 @@
                                     <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
                                     Jacson
                                 </li>
-                                <li class="list-group-item">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    Teste
-                                </li>
-                                <li class="list-group-item">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    usuario
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -205,10 +189,10 @@
                         <div>
                             <label for="acao">Ação</label>
                             <div class="padding">
-                                <a href="" class="btn btn-primary btn-block">Novo Órgão</a>
+                                <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#new">Novo Órgão</button>
                             </div>
                             <div class="padding">
-                                <a href="" class="btn btn-success btn-block">Novo Usuario</a>
+                                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#new">Novo Usuario</button>
                             </div>
                         </div>
                     </div>
@@ -220,9 +204,37 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="new" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="AddCtrl">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Novo</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col col-md-8 col-md-offset-2">
+                        <div class="form-group">
+                            <label for="">Nome do</label>
+                            <input type="text" class="form-control">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Adicionar</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script src="/assets/js/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
+<script src="/lib/ngStorage/ngStorage.min.js"></script>
+<script src="/assets/js/app.js"></script>
 <script>
     $('.glyphicon-menu-hamburger').on('click', function () {
         $('.submenu-mobile').toggle();

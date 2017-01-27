@@ -27,4 +27,10 @@ class IndexController
     {
         return $this->app['twig']->render('index.twig');
     }
+
+    public function postIndex(Request $request)
+    {
+//        var_dump($request->request->all());die;
+        return new RedirectResponse('/');
+    }
 }
