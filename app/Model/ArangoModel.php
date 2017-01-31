@@ -217,7 +217,7 @@ class ArangoModel
 
     /**
      * @param string $nameCollection
-     * @param int $id
+     * @param string $id
      * @return Document
      * @throws \Exception
      */
@@ -226,7 +226,7 @@ class ArangoModel
         if (!(is_string($nameCollection))) {
             throw new \Exception("Invalid value for parameter - 1");
         }
-        if (!(is_int($id))) {
+        if (!(is_string($id))) {
             throw new \Exception("Invalid value for parameter - 2");
         }
 
@@ -319,9 +319,9 @@ class ArangoModel
      */
     public function removeDocument($document)
     {
-        if (!($document instanceof Document) || !(is_array($document))) {
-            throw new \Exception("Invalid value for parameter");
-        }
+//        if (!($document instanceof Document) || !(is_array($document))) {
+//            throw new \Exception("Invalid value for parameter");
+//        }
 
         $doc = [];
         $documentHandler = $this->documentHandler();
@@ -331,7 +331,7 @@ class ArangoModel
         }
         if (is_array($document)) {
             foreach ($document as $nameCollection => $id) {
-                $doc = $this->getDocument((string)$nameCollection,(int)$id);
+                $doc = $this->getDocument((string)$nameCollection, $id);
             }
         }
         if ($doc) {

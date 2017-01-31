@@ -95,9 +95,7 @@ class AdminController
 
         $arango = $this->app['arango'];
 
-        $user = $arango->getDocument('users',(int) $key);
-
-        if (!$arango->removeDocument($user)) {
+        if (!$arango->removeDocument(['users'=> $key])) {
             return new JsonResponse('error',401);
         }
 

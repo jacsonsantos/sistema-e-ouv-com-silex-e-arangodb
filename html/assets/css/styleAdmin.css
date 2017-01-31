@@ -204,6 +204,20 @@
     background-color: rgba(255,30,30,.8);
     cursor: pointer;
 }
+.border-error{
+    border-color: rgba(255,30,30,.8);
+}
+.border-success{
+    border-color: #5cb85c;
+}
+.txt-danger{
+    color: rgba(255,30,30,.8);
+    font-weight: 700;
+}
+.txt-success{
+    color: #5cb85c;
+    font-weight: 700;
+}
 @media (max-width: 768px){
     .mobile{
         display: none;

@@ -215,6 +215,8 @@
             <div class="modal-body">
                 <div class="row">
                     <div class="col col-md-8 col-md-offset-2">
+                        <div class="alert alert-success" ng-if="(success)">Novo [[ title ]] Salvo</div>
+                        <div class="alert alert-danger" ng-if="(error)">Erro ao Salvar Novo [[ title ]]</div>
                         <div class="form-group">
                             <label for="Name">Nome do [[ title ]]</label>
                             <input type="text" class="form-control" ng-model="data.name" autofocus>
@@ -231,8 +233,12 @@
                             <div ng-if="ativo">
                                 <label for="Email">Email do [[ title ]]</label>
                                 <input type="email" class="form-control" ng-model="data.email">
-                                <label for="Password">Senha do [[ title ]]</label>
-                                <input type="password" class="form-control" ng-model="data.password">
+                                <div ng-if="!(success)">
+                                    <label for="Password">Senha do [[ title ]]</label>
+                                    <input type="password" class="form-control" ng-model="data.password">
+                                    <label for="Password">Confirmar Senha do [[ title ]] - <span class="txt-danger" ng-if="( confirmar != data.password )">Erro</span><span class="txt-success" ng-if="( confirmar == data.password )">Confirmado</span></label>
+                                    <input type="password" class="form-control" ng-class="{'border-error': ( confirmar != data.password ),'border-success': ( confirmar == data.password )}" ng-model="confirmar">
+                                </div>
                             </div>
                         </div>
                     </div>

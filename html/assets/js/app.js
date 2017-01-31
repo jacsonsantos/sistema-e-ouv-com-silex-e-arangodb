@@ -32,7 +32,7 @@ function appCtrl($scope, $http) {
     
 }
 
-function PanelCtrl($scope, $http) {
+function PanelCtrl($scope, $http, $httpParamSerializerJQLike) {
     $scope.users = [];
     $scope.collections = [];
     $scope.title = '';
@@ -61,7 +61,7 @@ function PanelCtrl($scope, $http) {
     }
 
     $scope.remove = function(key) {
-        $http.get(url+'/admin/users/'+key).then(
+        $http.delete(url+'/admin/users/'+key).then(
             function (d) {
                 $scope.users = d.data;
             },function (e) {
@@ -73,6 +73,8 @@ function PanelCtrl($scope, $http) {
 
 function addCtrl($scope, $http, $httpParamSerializerJQLike) {
     $scope.data = {};
+    $scope.success = false;
+    $scope.error = false;
 
     $scope.saveData = function (data, ativo) {
 
@@ -81,9 +83,9 @@ function addCtrl($scope, $http, $httpParamSerializerJQLike) {
         if(ativo) {
             $http.post(url+'/admin/users',data).then(
                 function (d) {
-                    $scope.data = d.data;
+                    $scope.success = true;
                 },function (e) {
-                    console.log(e);
+                    $scope.error = true;
                 }
             );
         } else {
