@@ -195,6 +195,15 @@
     display: none;
     visibility: hidden;
 }
+.box-color{
+    width: 10px !important;
+    height: 10px !important;
+    padding: 5px;
+}
+.delete:hover{
+    background-color: rgba(255,30,30,.8);
+    cursor: pointer;
+}
 @media (max-width: 768px){
     .mobile{
         display: none;

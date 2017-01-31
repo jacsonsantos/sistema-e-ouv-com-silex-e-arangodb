@@ -18,6 +18,7 @@ chdir(dirname(__DIR__));
     $app->register(new \JSantos\Provider\LoginServiceProvider());
     $app->register(new \JSantos\Provider\RouteServiceProvider());
     $app->register(new \JSantos\Provider\AuthServiceProvider());
+    $app->register(new \JSantos\Provider\ArangoModelServiceProvider());
     $app->register(new Silex\Provider\ServiceControllerServiceProvider());
     $app->register(new Silex\Provider\SessionServiceProvider());
 

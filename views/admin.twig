@@ -146,9 +146,9 @@
         </div>
     </div>
 </div>
-
+<div ng-controller="PanelCtrl">
 <!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" ng-controller="PanelCtrl">
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -160,13 +160,13 @@
                     <div class="col col-md-4">
                         <div>
                             <label for="">Órgãos</label>
-                            <input type="text" class="form-control" placeholder="Filtrar">
+                            <input type="text" class="form-control" placeholder="Filtrar" ng-model="sear">
                         </div>
                         <div class="padding">
                             <ul class="list-group">
-                                <li class="list-group-item">
+                                <li class="list-group-item" ng-if="(collections.length > 0)" ng-repeat="collection in collections | filter:sear">
                                     <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    Administração
+                                    [[ collection.name ]]
                                 </li>
                             </ul>
                         </div>
@@ -174,13 +174,13 @@
                     <div class="col col-md-4">
                         <div>
                             <label for="">Usuarios</label>
-                            <input type="text" class="form-control" placeholder="Filtrar">
+                            <input type="text" class="form-control" placeholder="Filtrar" ng-model="search">
                         </div>
                         <div class="padding">
                             <ul class="list-group">
-                                <li class="list-group-item">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
-                                    Jacson
+                                <li class="list-group-item" ng-if="(users.length > 0)" ng-repeat="user in users | filter:search">
+                                    <span class="badge delete" ng-click="remove(user.key)"><span class="glyphicon glyphicon-trash"></span></span>
+                                    [[ user.name ]]
                                 </li>
                             </ul>
                         </div>
@@ -189,10 +189,10 @@
                         <div>
                             <label for="acao">Ação</label>
                             <div class="padding">
-                                <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#new">Novo Órgão</button>
+                                <button class="btn btn-primary btn-block" data-toggle="modal" data-target="#new" ng-click="newTitle('Orgão',false)">Novo Órgão</button>
                             </div>
                             <div class="padding">
-                                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#new">Novo Usuario</button>
+                                <button class="btn btn-success btn-block" data-toggle="modal" data-target="#new" ng-click="newTitle('Usuario',true)">Novo Usuario</button>
                             </div>
                         </div>
                     </div>
@@ -210,30 +210,45 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Novo</h4>
+                <h4 class="modal-title" id="myModalLabel">Novo [[ title ]]</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
                     <div class="col col-md-8 col-md-offset-2">
                         <div class="form-group">
-                            <label for="">Nome do</label>
-                            <input type="text" class="form-control">
+                            <label for="Name">Nome do [[ title ]]</label>
+                            <input type="text" class="form-control" ng-model="data.name" autofocus>
+                            <div ng-if="!(ativo)">
+                                <label for="Email">Cor do [[ title ]]</label>
+                                <div>
+                                    <span class="box-color btn-default">&nbsp;</span>
+                                    <span class="box-color btn-info">&nbsp;</span>
+                                    <span class="box-color btn-primary">&nbsp;</span>
+                                    <span class="box-color btn-warning">&nbsp;</span>
+                                    <span class="box-color btn-danger">&nbsp;</span>
+                                </div>
+                            </div>
+                            <div ng-if="ativo">
+                                <label for="Email">Email do [[ title ]]</label>
+                                <input type="email" class="form-control" ng-model="data.email">
+                                <label for="Password">Senha do [[ title ]]</label>
+                                <input type="password" class="form-control" ng-model="data.password">
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                <button type="button" class="btn btn-primary">Adicionar</button>
+                <button type="button" class="btn btn-primary" ng-click="saveData(data, ativo)">Adicionar</button>
             </div>
         </div>
     </div>
 </div>
-
+</div>
 <script src="/assets/js/jquery.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.1/angular.min.js"></script>
-<script src="/lib/ngStorage/ngStorage.min.js"></script>
 <script src="/assets/js/app.js"></script>
 <script>
     $('.glyphicon-menu-hamburger').on('click', function () {

@@ -419,6 +419,14 @@ class ArangoModel
         return $result->getAll();
     }
 
+    public function getAllDocument($nameCollection)
+    {
+        $collection = (string) $nameCollection;
+        if (!$this->hasCollection($collection)) {
+            return null;
+        }
+        return $this->query("FOR u IN $collection RETURN u");
+    }
     /**
      * @param string $nameCollection
      * @param array $document [ "key" => "needle"]
