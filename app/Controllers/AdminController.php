@@ -69,6 +69,7 @@ class AdminController
 
         return new JsonResponse($users);
     }
+
     public function postUsers(Request $request)
     {
         $this->verificy($request);
@@ -85,7 +86,7 @@ class AdminController
         return new JsonResponse($user);
     }
 
-    public function getDelete($key, Request $request)
+    public function deleteUsers($key, Request $request)
     {
         $this->verificy($request);
 
@@ -107,13 +108,20 @@ class AdminController
         $this->verificy($request);
         $arango = $this->app['arango'];
 
-        $docs = $arango->getAllDocument('orgoas');
+        $docs = $arango->getAllDocument('orgaos');
         $collections = [];
         foreach ($docs as $doc) {
-            array_push($collections, ['name'=>$doc->name]);
+            array_push($collections, ['name'=>$doc->orgao,'key'=> $doc->getId()]);
         }
 
         return new JsonResponse($collections);
+    }
+    public function postOrgaos(Request $request)
+    {
+        $this->verificy($request);
+        $arango = $this->app['arango'];
+
+        return new JsonResponse('success');
     }
 
     private function clearToken(Request $request)
@@ -122,6 +130,7 @@ class AdminController
         $token = trim(str_replace("Bearer", "", $token));
         return base64_decode($token);
     }
+
     private function verificy(Request $request)
     {
         $token = $this->clearToken($request);

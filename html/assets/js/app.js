@@ -20,7 +20,7 @@ app.controller('AppCtrl',appCtrl)
 .controller('AddCtrl',addCtrl);
 
 function appCtrl($scope, $http) {
-    
+    $scope.collections = [];
     $http.get(url+'/admin/token').then(
         function (d) {
             if (!localStorage.getItem('token')) {
@@ -28,7 +28,15 @@ function appCtrl($scope, $http) {
             }
         },
         function (e) {}
-    )
+    );
+    $http.get(url+'/admin/orgaos').then(
+        function (d) {
+            $scope.collections = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
     
 }
 
@@ -46,15 +54,14 @@ function PanelCtrl($scope, $http, $httpParamSerializerJQLike) {
             console.log(e);
         }
     );
-    // $http.get(url+'/admin/orgaos').then(
-    //     function (d) {
-    //         // console.log(d.data);
-    //         $scope.collections = d.data;
-    //     },
-    //     function (e) {
-    //         console.log(e);
-    //     }
-    // );
+    $http.get(url+'/admin/orgaos').then(
+        function (d) {
+            $scope.collections = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
     $scope.newTitle = function (ntitle, ativo) {
         $scope.title = ntitle;
         $scope.ativo = ativo;
@@ -91,9 +98,9 @@ function addCtrl($scope, $http, $httpParamSerializerJQLike) {
         } else {
             $http.post(url+'/admin/orgaos',data).then(
                 function (d) {
-                    $scope.data = d.data;
+                    $scope.success = true;
                 },function (e) {
-                    console.log(e);
+                    $scope.error = true;
                 }
             );
         }
