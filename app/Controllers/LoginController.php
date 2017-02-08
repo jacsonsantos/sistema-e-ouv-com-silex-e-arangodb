@@ -31,7 +31,7 @@ class LoginController
         $data  = $request->request->all();
         $arango = new ArangoModel($this->app);
 
-        $user = $arango->searchInDocument('users',['email'=>$data['email']]);
+        $user = $arango->searchInDocument('user',['email'=>$data['email']]);
 
         if (!count($user)) {
             return new RedirectResponse('/login');

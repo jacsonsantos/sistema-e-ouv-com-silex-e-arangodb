@@ -34,9 +34,6 @@
             <select name="" id="" class="form-control">
                 <option value="">Todos Órgãos</option>
                 <option value="[[ collection.key ]]" ng-repeat="collection in collections">[[ collection.name ]]</option>
-                <!--option value="">Educação</option>
-                <option value="">Infraestrutura</option>
-                <option value="">Saúde</option-->
             </select>
         </div>
         <div class="row">
@@ -165,7 +162,7 @@
                         <div class="padding">
                             <ul class="list-group">
                                 <li class="list-group-item" ng-if="(collections.length > 0)" ng-repeat="collection in collections | filter:sear">
-                                    <span class="badge"><span class="glyphicon glyphicon-trash"></span></span>
+                                    <span class="badge delete"><span class="glyphicon glyphicon-trash"></span></span>
                                     [[ collection.name ]]
                                 </li>
                             </ul>
@@ -220,6 +217,10 @@
                         <div class="form-group">
                             <label for="Name">Nome do [[ title ]]</label>
                             <input type="text" class="form-control" ng-model="data.name" autofocus>
+                            <div ng-if="!(ativo)">
+                                <label for="Email">Icone do [[ title ]]</label>
+                                <input type="text" class="form-control" ng-model="data.icone">
+                            </div>
                             <div ng-if="ativo">
                                 <label for="Email">Email do [[ title ]]</label>
                                 <input type="email" class="form-control" ng-model="data.email">

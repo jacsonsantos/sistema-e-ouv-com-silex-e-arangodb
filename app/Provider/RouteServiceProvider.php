@@ -18,6 +18,7 @@ class RouteServiceProvider implements ServiceProviderInterface
     {
         $app->get('/',"index:getIndex");
         $app->post('/',"index:postIndex");
+        $app->get('/chat',"index:getChat");
 
         $app->mount('/login', function($login) {
             $login->get('/',"login:getIndex");

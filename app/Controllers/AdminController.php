@@ -60,7 +60,7 @@ class AdminController
         $this->verificy($request);
         $arango = $this->app['arango'];
 
-        $docs = $arango->getAllDocument('users');
+        $docs = $arango->getAllDocument('user');
 
         $users = [];
         foreach ($docs as $doc) {
@@ -79,7 +79,7 @@ class AdminController
 
         $arango = $this->app['arango'];
 
-        if(!$arango->createDocument('users',$user)) {
+        if(!$arango->createDocument('user',$user)) {
             return new JsonResponse('error Token',401);
         }
 
@@ -96,7 +96,7 @@ class AdminController
 
         $arango = $this->app['arango'];
 
-        if (!$arango->removeDocument(['users'=> $key])) {
+        if (!$arango->removeDocument(['user'=> $key])) {
             return new JsonResponse('error',401);
         }
 
@@ -108,7 +108,7 @@ class AdminController
         $this->verificy($request);
         $arango = $this->app['arango'];
 
-        $docs = $arango->getAllDocument('orgaos');
+        $docs = $arango->getAllDocument('orgao');
         $collections = [];
         foreach ($docs as $doc) {
             array_push($collections, ['name'=>$doc->orgao,'key'=> $doc->getId()]);
@@ -116,6 +116,7 @@ class AdminController
 
         return new JsonResponse($collections);
     }
+
     public function postOrgaos(Request $request)
     {
         $this->verificy($request);

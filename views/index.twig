@@ -10,6 +10,7 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+		<link rel="stylesheet" href="assets/css/chat.css" />
 		<link rel="stylesheet" href="assets/css/main.css" />
 		<!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
 		<!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
@@ -52,24 +53,14 @@
 							<h2>Serviços</h2>
 						</header>
 						<p>
-							Atualmente escolhi apenas 4 (quatro) órgãos para poder buscar resultados positivos e transparentes, acredito que apenas estes órgãos seja possivel termos um município com bons resultados e bem administrado.</p>
+							Atualmente escolhi apenas estes órgãos para poder buscar resultados positivos e transparentes, acredito que apenas estes órgãos seja possivel termos um município com bons resultados e bem administrado.</p>
 						<ul class="icons-grid">
+							{% for collection in collections %}
 							<li>
-								<span class="icon major fa-suitcase"></span>
-								<h3>Administração</h3>
+								<span class="icon major {{ collection['icone'] }}"></span>
+								<h3>{{ collection['orgao'] }}</h3>
 							</li>
-							<li>
-								<span class="icon major fa-pencil"></span>
-								<h3>Educação</h3>
-							</li>
-							<li>
-								<span class="icon major fa-building-o"></span>
-								<h3>Infraestrutura</h3>
-							</li>
-							<li>
-								<span class="icon major fa-heartbeat"></span>
-								<h3>Saúde</h3>
-							</li>
+							{% endfor %}
 						</ul>
 					</div>
 					<a href="#three" class="goto-next scrolly">Next</a>
@@ -107,28 +98,25 @@
 					<form method="post" action="/" enctype="multipart/form-data">
 						<div class="row uniform">
 							<div class="12u$">
-								<select name="category" id="category">
+								<select name="category" id="category" required>
 									<option value="">Selecione a Categoria</option>
-									<option value="denuncia">Denúncia</option>
-									<option value="elogio">Elogio</option>
-									<option value="reclamação">Reclamação</option>
-									<option value="solicitação">Solicitação</option>
-									<option value="sugestão">Sugestão</option>
+									{% for cat in categorys %}
+									<option value="{{ cat['key'] }}">{{ cat['name'] }}</option>
+									{% endfor %}
 								</select>
 							</div>
 							<div class="12u$">
-								<select name="orgao" id="category">
+								<select name="orgao" id="category" required>
 									<option value="">Selecione o Órgão</option>
-									<option value="administracao">Administração</option>
-									<option value="educacao">Educação</option>
-									<option value="infraestrutura">Infraestrutura</option>
-									<option value="saude">Saúde</option>
+									{% for collection in collections %}
+										<option value="{{ collection['key'] }}">{{ collection['orgao'] }}</option>
+									{% endfor %}
 								</select>
 							</div>
-							<div class="6u 12u$(xsmall)"><input type="text" name="name" id="name" placeholder="Nome" /></div>
-							<div class="6u$ 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Email" /></div>
-							<div class="12u$"><input type="text" name="subject" id="subject" placeholder="Assunto" /></div>
-							<div class="12u$"><textarea name="message" id="message" placeholder="Mensagem" rows="4"></textarea></div>
+							<div class="6u 12u$(xsmall)"><input type="text" name="name" id="name" placeholder="Nome" required /></div>
+							<div class="6u$ 12u$(xsmall)"><input type="email" name="email" id="email" placeholder="Email" required /></div>
+							<div class="12u$"><input type="text" name="subject" id="subject" placeholder="Assunto" required /></div>
+							<div class="12u$"><textarea name="message" id="message" placeholder="Mensagem" rows="4" required></textarea></div>
 							<div>
 								<i class="icon alt fa-picture-o fa-2x photo" style="cursor: pointer;"></i> <span class="title">Nenhuma imagem selecionada</span>
 								<input type="file" style="display:none;" name="photo" id="photo" accept="image/jpeg">
@@ -141,6 +129,56 @@
 						</div>
 					</form>
 				</div>
+
+				<!--div class="popup-box-min chat-popup popup-box-on" id="addClass" style="cursor: pointer">
+					<div class="popup-head">
+						<div class="popup-head-left pull-left" style="font-weight: 700;">Abrir Chat</div>
+						<span><i class="fa fa-window"></i></span>
+					</div>
+				</div>
+
+				<div class="popup-box chat-popup" id="qnimate">
+					<div class="popup-head">
+						<div class="popup-head-left pull-left"><img src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" alt="iamgurdeeposahan"> Gurdeep Osahan</div>
+						<span id="removeClass" style="cursor: pointer;padding: 5px;" title="Minimizar"><i class="fa fa-minus"></i></span>
+					</div>
+
+					<div class="popup-messages">
+						<div class="direct-chat-messages">
+							<div class="chat-box-single-line">
+								<abbr class="timestamp">October 8th, 2015</abbr>
+							</div>
+
+							<div class="direct-chat-msg doted-border">
+								<img alt="message user image" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="direct-chat-img">
+								<div class="direct-chat-text">
+									Hey bro, how’s everything going ?
+								</div>
+								<div class="direct-chat-info clearfix">
+									<span class="direct-chat-timestamp pull-right">3.36 PM</span>
+								</div>
+								<div class="direct-chat-info clearfix">
+									<span class="direct-chat-img-reply-small pull-left"></span>
+									<span class="direct-chat-reply-name">Singh</span>
+								</div>
+							</div>
+
+						</div>
+					</div>
+
+					<div class="popup-messages-footer">
+						<div class="12u$">
+							<textarea placeholder="Type a message..." rows="4"></textarea>
+						</div>
+						<div class="icons">
+							<button class=""><i class="icon fa fa-video-camera"></i> </button>
+							<button class=""><i class="icon fa fa-camera"></i> </button>
+							<button class=""><i class="icon fa fa-file"></i> </button>
+							<button class=""><i class="icon fa fa-paper-plane"></i> </button>
+						</div>
+					</div>
+				</div-->
+
 				<footer>
 					<ul class="icons">
 						<li><a href="#" class="icon alt fa-twitter"><span class="label">Twitter</span></a></li>
@@ -154,7 +192,7 @@
 					</ul>
 				</footer>
 			</section>
-			<span style="position: fixed;padding: 10px 16px;border-radius: 50%;right: 25px;bottom: 25px;cursor: pointer;background: #8cd1a8;color:#fff;" class="top"><i class="fa fa-angle-double-up fa-2x"></i></span>
+			<span style="position: fixed;padding: 10px 16px;border-radius: 50%;right: 15px;bottom: 25px;cursor: pointer;background: #8cd1a8;color:#fff;" class="top"><i class="fa fa-angle-double-up fa-2x"></i></span>
 		<!-- Scripts -->
 			<script src="assets/js/jquery.min.js"></script>
 			<script src="assets/js/jquery.scrollex.min.js"></script>
@@ -164,6 +202,24 @@
 			<!--[if lte IE 8]><script src="assets/js/ie/respond.min.js"></script><![endif]-->
 			<script src="assets/js/main.js"></script>
 			<script>
+//				var conn = new WebSocket('ws:'+url);
+//				conn.onopen = function(e) {
+//					console.log("Connection established!");
+//				};
+//
+//				conn.onmessage = function(e) {
+//					console.log(e.data);
+//				};
+
+//				$(function(){
+//					$("#addClass").click(function () {
+//						$('#qnimate').addClass('popup-box-on');
+//					});
+//
+//					$("#removeClass").click(function () {
+//						$('#qnimate').removeClass('popup-box-on');
+//					});
+//				})
 				$(function () {
 					$('.photo').on('click', function () {
 						$('#photo').trigger('click');
