@@ -1,0 +1,20 @@
+div.alert{
+    font-size: 16pt;
+    padding: 10px;
+    position: relative;
+    margin: 10px 0;
+    display: block;
+    font-weight: 500;
+}
+div.alert-success{
+    background-color: #8cd1a8;
+    color: #fff;
+}
+div.alert-error{
+    background-color: #d9534f;
+    color: #fff;
+}
+div.alert-warning{
+    background-color: #f0ad4e;
+    color: #fff;
+}

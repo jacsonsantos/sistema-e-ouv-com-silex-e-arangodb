@@ -15,6 +15,7 @@ use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Session\Flash\FlashBag;
 
 class IndexController
 {
@@ -47,21 +48,48 @@ class IndexController
 
     public function postIndex(Request $request)
     {
+        $hasPhoto = false;
         $data = $request->request->all();
-        $data['mimetype'] = '';
+
+        if ($request->files->has('photo')) {
+            $file = $request->files->get("photo");
+            $newName = md5($file->getClientOriginalName());
+            $ext = $file->getClientOriginalExtension();
+            $data['anexo'] = $newName.'.'.$ext;
+            $data['mimetype'] = $file->getClientMimeType();
+            $hasPhoto = true;
+        }
+
+        $data['category'] = (string)$data['category'];
+        $data['orgao'] = (string)$data['orgao'];
+        $data['name'] = (string)$data['name'];
+        $data['email'] = (string)$data['email'];
+        $data['subject'] = (string)$data['subject'];
+        $data['message'] = (string)$data['message'];
+
         $data['enviado'] = date('d/m/Y H:i:s');
         $data['visualizado'] = false;
         $data['pendente'] = true;
 
         $arango = $this->app['arango'];
 
-        if(!$arango->createDocument('mensagem',$data)) {
-            echo "<script>alert('Erro ao enviar mensagem!')</script>";
-            return new RedirectResponse('/');
+        if ($hasPhoto && !file_exists('/uploads/'.$newName.'.'.$ext)) {
+            if ($file->move('/uploads',$newName.'.'.$ext)) {
+                if(!$arango->createDocument('mensagem',$data)) {
+                    $this->app['session']->getFlashBag()->add('error','Erro ao enviar manifestação');
+                    return new RedirectResponse('/#message');
+                }
+            }
+        } else {
+            if (!$arango->createDocument('mensagem', $data)) {
+                $this->app['session']->getFlashBag()->add('error', 'Erro ao enviar manifestação');
+                return new RedirectResponse('/#message');
+            }
         }
-        echo "<script>alert('Mensagem enviada')</script>";
 
-        return new RedirectResponse('/');
+        $this->app['session']->getFlashBag()->add('success','Manifestação enviada');
+
+        return new RedirectResponse('/#message');
     }
 
     public function getChat(Request $request)

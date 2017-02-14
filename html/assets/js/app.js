@@ -37,7 +37,47 @@ function appCtrl($scope, $http) {
             console.log(e);
         }
     );
-    
+    $http.get(url+'/admin/reclamacao').then(
+        function (d) {
+            $scope.reclamcao = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
+    $http.get(url+'/admin/sugestao').then(
+        function (d) {
+            $scope.sugestao = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
+    $http.get(url+'/admin/elogio').then(
+        function (d) {
+            $scope.elogio = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
+    $http.get(url+'/admin/solicitacao').then(
+        function (d) {
+            $scope.solicitacao = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
+    $http.get(url+'/admin/denuncia').then(
+        function (d) {
+            $scope.denuncia = d.data;
+        },
+        function (e) {
+            console.log(e);
+        }
+    );
+
 }
 
 function PanelCtrl($scope, $http, $httpParamSerializerJQLike) {

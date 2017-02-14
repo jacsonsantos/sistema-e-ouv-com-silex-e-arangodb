@@ -36,6 +36,12 @@ class RouteServiceProvider implements ServiceProviderInterface
             $admin->post('/users',"admin:postUsers");
             $admin->delete('/users/{key}',"admin:deleteUsers")->value('key',null);
 
+            $admin->get('/reclamacao',"admin:getReclamacao");
+            $admin->get('/sugestao',"admin:getSugestao");
+            $admin->get('/elogio',"admin:getElogio");
+            $admin->get('/solicitacao',"admin:getSolicitacao");
+            $admin->get('/denuncia',"admin:getDenuncia");
+
             $admin->get('/orgaos',"admin:getOrgaos");
             $admin->post('/orgaos',"admin:postOrgaos");
             $admin->delete('/orgaos/{key}',"admin:deleteOrgaos")->value('key',null);
