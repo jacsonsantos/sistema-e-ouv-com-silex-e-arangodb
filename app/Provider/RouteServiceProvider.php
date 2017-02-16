@@ -46,7 +46,7 @@ class RouteServiceProvider implements ServiceProviderInterface
             $admin->post('/orgaos',"admin:postOrgaos");
             $admin->delete('/orgaos/{key}',"admin:deleteOrgaos")->value('key',null);
 
-            $admin->get('/category/{slug}',"admin:getCategory")->value('slug',null);
+            $admin->get('/category/{category}',"admin:getCategory")->value('category',null);
             $admin->before(function() use($app) {
 
                 $token = '';

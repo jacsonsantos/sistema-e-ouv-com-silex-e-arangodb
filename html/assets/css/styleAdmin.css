@@ -181,6 +181,22 @@
     background-color: #d9534f;
     color: #fff;
 }
+.bg-green{
+    background-color: #5cb85c;
+    color: #fff;
+}
+.bg-dark-blue{
+    background-color: #337ab7;
+    color: #fff;
+}
+.bg-blue{
+    background-color: #5bc0de;
+    color: #fff;
+}
+.bg-orange{
+    background-color: #f0ad4e;
+    color: #fff;
+}
 .padding{
     padding: 20px 10px;
 }

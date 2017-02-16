@@ -27,25 +27,27 @@
 <div class="container">
     <div class="padding">
         <div class="list-group">
-            <div class="list-group-item bg-red">
-                <h1 class="text-center">Denúncia</h1>
+            <div class="list-group-item bg-{{ docCategory.color }}">
+                <h1 class="text-center">{{ docCategory.name }}</h1>
             </div>
             <div class="list-group-item">
                 <div class="row">
                     <div class="col-md-1 text-right"><strong>Ações</strong></div>
-                    <div class="col-md-9"><strong>Assunto</strong></div>
+                    <div class="col-md-8"><strong>Assunto</strong></div>
                     <div class="col-md-1"><strong>Status</strong></div>
-                    <div class="col-md-1"><strong>Enviado</strong></div>
+                    <div class="col-md-2"><strong>Enviado</strong></div>
                 </div>
             </div>
+            {% for mensagem in mensagens %}
             <div class="list-group-item item-hover">
                 <div class="row">
                     <div class="col-md-1 text-right"><input type="checkbox"></div>
-                    <div class="col-md-9 cursor" data-toggle="modal" data-target="#myModal"><h5><strong>Lorem ipsum dolor.</strong></h5></div>
-                    <div class="col-md-1"><span>pendente</span></div>
-                    <div class="col-md-1"><span>09/01/2017</span></div>
+                    <div class="col-md-8 cursor" data-toggle="modal" data-target="#myModal"><h5><strong>{{ mensagem.subject }}</strong></h5></div>
+                    <div class="col-md-1"><span>{{ mensagem.pendente ? 'Pendente':'Respondida' }}</span></div>
+                    <div class="col-md-2"><span>{{ mensagem.enviado }}</span></div>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 </div>

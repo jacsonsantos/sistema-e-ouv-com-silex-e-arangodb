@@ -50,6 +50,7 @@ class AdminController
         $reclamacoesResolvido = $reclamacoesResolvido[0]->count;
 
         $reclamacao = [
+            'key' => self::categorys['reclamacao'],
             'pendente' => $reclamacoesPendente,
             'resolvido' => $reclamacoesResolvido,
             'mensagem' => ($reclamacoesPendente + $reclamacoesResolvido),
@@ -71,6 +72,7 @@ class AdminController
         $sugestoesResolvido = $sugestoesResolvido[0]->count;
 
         $sugestao = [
+            'key' => self::categorys['sugestao'],
             'pendente' => $sugestoesPendente,
             'resolvido' => $sugestoesResolvido,
             'mensagem' => ($sugestoesResolvido + $sugestoesPendente),
@@ -92,6 +94,7 @@ class AdminController
         $elogioResolvido = $elogioResolvido[0]->count;
 
         $elogio = [
+            'key' => self::categorys['elogio'],
             'pendente' => $elogioPendente,
             'resolvido' => $elogioResolvido,
             'mensagem' => ($elogioPendente + $elogioResolvido),
@@ -113,6 +116,7 @@ class AdminController
         $denunciaResolvido = $denunciaResolvido[0]->count;
 
         $denuncia = [
+            'key' => self::categorys['denuncia'],
             'pendente' => $denunciaPendente,
             'resolvido' => $denunciaResolvido,
             'mensagem' => ($denunciaPendente + $denunciaResolvido),
@@ -134,6 +138,7 @@ class AdminController
         $solicitacaoResolvido = $solicitacaoResolvido[0]->count;
 
         $solicitacao = [
+            'key' => self::categorys['solicitacao'],
             'pendente' => $solicitacaoPendente,
             'resolvido' => $solicitacaoResolvido,
             'mensagem' => ($solicitacaoPendente + $solicitacaoResolvido),
@@ -151,13 +156,24 @@ class AdminController
 
         return new JsonResponse($token);
     }
-    public function getCategory($slug, Request $request)
+    public function getCategory($category, Request $request)
     {
-        if (is_null($slug)) {
+        if (is_null($category)) {
             return new RedirectResponse('/admin');
         }
+        $category = (string) $category;
+        $arango = $this->app['arango'];
 
-        return $this->app['twig']->render('category.twig');
+        $aql = "FOR m IN @@mensagem FILTER m.category == @category RETURN m";
+        $arango->prepare($aql);
+        $arango->bindCollection(['mensagem' => 'mensagem']);
+        $arango->bindValue(['category' => $category]);
+        $mensagens = $arango->execute();
+
+        $docCategory = $arango->query('RETURN DOCUMENT("categoria/'. $category .'")');
+        $docCategory = $docCategory[0];
+
+        return $this->app['twig']->render('category.twig', compact('titulo','color','mensagens','docCategory'));
     }
     public function getPanel(Request $request)
     {
